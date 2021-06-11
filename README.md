@@ -7,7 +7,8 @@
 ## Install
 
 ```bash
-npm install github:unbelief/react-canvas
+# npm install github:unbelief/react-canvas
+yarn add git+ssh:git@github.com:unbelief/react-canvas.git
 # npm install git+ `#branch` or `#tag`
 # npm help install
 ```
