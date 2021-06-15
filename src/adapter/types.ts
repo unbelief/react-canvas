@@ -29,8 +29,8 @@ enum EventType {
 }
 
 interface Event {
-  type: EventType;
-  handler: () => void;
+  type: string;
+  handle: () => void;
 }
 
 interface Attribute {
@@ -38,19 +38,21 @@ interface Attribute {
   top?: number;
   right?: number;
   bottom?: number;
-  width?: number | string;
-  height?: number | string;
-  border?: number | string;
+  width?: number;
+  height?: number;
+  border?: number | string | boolean;
   // text
-  textAlign?: string;
-  textBaseline?: string;
+  textAlign?: CanvasTextAlign;
+  textBaseline?: CanvasTextBaseline;
+  font?: string;
+  fillStyle?: string;
   // image
 }
 
 interface Props {
   attribute?: Attribute;
   event?: Event;
-  children?: undefined | object | Array<Object>;
+  children?: object | Array<Object>;
 }
 
 export { EventType, Event, Attribute, Props };

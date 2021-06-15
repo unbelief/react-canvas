@@ -19,7 +19,6 @@ interface State {
 
 interface Action {
   type: string;
-  // body: {type:string,handle:()=>void};
   body: {
     type: string;
     handle: () => void;
@@ -60,6 +59,7 @@ interface ContextProps {
   state: string;
   dispatch: ({ type }: { type: string }) => void;
 }
+// React.Context<ContextProps>
 const context: any = createContext({} as ContextProps);
 /**
  * provider

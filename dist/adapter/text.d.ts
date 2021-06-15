@@ -1,8 +1,14 @@
-declare function Text(props: any): null;
+import { Props, Attribute, Event } from "./types";
+interface TextProps extends Props {
+    content: string;
+    style?: Attribute;
+    event?: Event;
+}
+declare function Text(props: TextProps): null;
 /**
  *
  * @param {object} context
  * @param {object} attributes top left width height x y font fontSize fillStyle
  */
-declare function renderText(ctx: any, attributes: any, content: any): void;
+declare function renderText(ctx: CanvasRenderingContext2D, attributes: Required<Attribute>, content: string): void;
 export { Text, renderText };

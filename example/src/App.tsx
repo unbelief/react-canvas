@@ -7,9 +7,8 @@ function App() {
   return (
     <Scene
       attribute={{
-        width: "500px",
-        height: "350px",
-        // cursor: "default",
+        width: 500,
+        height: 350,
       }}
     >
       <Text
@@ -20,7 +19,7 @@ function App() {
           height: 30,
           font: "25px Lato",
           fillStyle: "#fff",
-          border: true,
+          // border: true,
         }}
         event={{
           type: "click",
@@ -34,10 +33,9 @@ function App() {
       <Image
         attribute={{
           top: 120,
-          left: 60,
-          width: 350,
-          height: 360,
-          border: 1,
+          left: 100,
+          width: 92,
+          height: 33,
         }}
         event={{
           type: "click",
@@ -46,7 +44,7 @@ function App() {
           },
         }}
         src={
-          "https://cdn2.jianshu.io/assets/default_avatar/5-33d2da32c552b8be9a0548c7a4576607.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96"
+          "https://www.google.com/logos/doodles/2021/doodle-for-google-2021-us-winner-6753651837109220-s.png"
         }
       />
     </Scene>

@@ -1,24 +1,6 @@
 import React, { createContext, useReducer, useContext, useRef, useEffect } from 'react';
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-var initialState = {
+const initialState = {
   devicePixelRatio: 1,
   canvas: null,
   context: null,
@@ -26,88 +8,85 @@ var initialState = {
   shapes: new Set()
 };
 
-var reducer = function reducer(state, action) {
+const reducer = (state, action) => {
   switch (action.type) {
     case "initialize":
       return Object.assign(state, action.state);
 
     case "update:shape":
-      return _extends({}, state, {
-        events: [].concat(state.events, [action.body.type]),
+      return { ...state,
+        events: [...state.events, action.body.type],
         shapes: state.shapes.add(action.body)
-      });
+      };
 
     default:
       return state;
   }
 };
 
-var context = createContext({});
+const context = createContext({});
 
-var Scene = function Scene(props) {
-  var _useReducer = useReducer(reducer, initialState),
-      state = _useReducer[0],
-      dispatch = _useReducer[1];
-
+const Scene = props => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return React.createElement(context.Provider, {
     value: {
-      state: state,
-      dispatch: dispatch
+      state,
+      dispatch
     }
   }, React.createElement(Stage, Object.assign({}, props)), props.children);
 };
 
-var Stage = function Stage(props) {
-  var _useContext = useContext(context),
-      state = _useContext.state,
-      dispatch = _useContext.dispatch;
-
-  var stageRef = useRef(null);
-  var attributes = props.attribute || {};
-  useEffect(function () {
-    var canvas = stageRef.current;
-    var devicePixelRatio = window.devicePixelRatio || 1;
+const Stage = props => {
+  const {
+    state,
+    dispatch
+  } = useContext(context);
+  const stageRef = useRef(null);
+  const attributes = props.attribute || {};
+  useEffect(() => {
+    const canvas = stageRef.current;
+    const devicePixelRatio = window.devicePixelRatio || 1;
     canvas.width = ~~canvas.clientWidth * devicePixelRatio;
     canvas.height = ~~canvas.clientHeight * devicePixelRatio;
-    var context = canvas.getContext("2d");
-    var state = {
-      devicePixelRatio: devicePixelRatio,
-      canvas: canvas,
-      context: context
+    const context = canvas.getContext("2d");
+    const state = {
+      devicePixelRatio,
+      canvas,
+      context
     };
     dispatch({
       type: "initialize",
       state: state
     });
   }, []);
-  useEffect(function () {
-    state.events.forEach(function (type) {
+  useEffect(() => {
+    state.events.forEach(type => {
       state.canvas.addEventListener(type, stageHandle);
     });
-    return function () {
-      state.events.forEach(function (type) {
+    return () => {
+      state.events.forEach(type => {
         state.canvas.removeEventListener(type, stageHandle);
       });
     };
   }, [state.events]);
 
   function stageHandle(e) {
-    var node = e.target;
-
-    var _node$getBoundingClie = node.getBoundingClientRect(),
-        left = _node$getBoundingClie.left,
-        top = _node$getBoundingClie.top;
-
-    var originalX, originalY;
-    var evtArgs = {
+    const node = e.target;
+    const {
+      left,
+      top
+    } = node.getBoundingClientRect();
+    let originalX, originalY;
+    const evtArgs = {
       originalEvent: e,
       type: event
     };
 
     if (isTouch(e)) {
-      var _e$changedTouches$ = e.changedTouches[0],
-          clientX = _e$changedTouches$.clientX,
-          clientY = _e$changedTouches$.clientY;
+      const {
+        clientX,
+        clientY
+      } = e.changedTouches[0];
       originalX = Math.round(clientX - left);
       originalY = Math.round(clientY - top);
     } else {
@@ -115,20 +94,20 @@ var Stage = function Stage(props) {
       originalY = Math.round(e.clientY - top);
     }
 
-    var x, y;
+    let x, y;
     x = state.devicePixelRatio * originalX;
     y = state.devicePixelRatio * originalY;
     Object.assign(evtArgs, {
-      originalX: originalX,
-      originalY: originalY
+      originalX,
+      originalY
     }, {
-      x: x,
-      y: y
+      x,
+      y
     });
-    state.shapes.forEach(function (shape) {
+    state.shapes.forEach(shape => {
       e.type === shape.type ? isInside({
-        x: x,
-        y: y
+        x,
+        y
       }, shape.rect) ? shape.handle() : 0 : 0;
     });
     e.preventDefault();
@@ -145,25 +124,25 @@ var Stage = function Stage(props) {
   return React.createElement("canvas", {
     ref: stageRef,
     style: attributes,
-    onContextMenu: function onContextMenu(e) {
+    onContextMenu: e => {
       e.preventDefault();
     },
-    onMouseOver: function onMouseOver() {
-      var canvas = stageRef.current;
+    onMouseOver: () => {
+      const canvas = stageRef.current;
       canvas.style.cursor = "pointer";
     },
-    onMouseOut: function onMouseOut() {
-      var canvas = stageRef.current;
+    onMouseOut: () => {
+      const canvas = stageRef.current;
       canvas.style.cursor = "default";
     }
   });
 };
 
 function useAttributes (props, attributes) {
-  var _useContext = useContext(context),
-      dispatch = _useContext.dispatch;
-
-  var defaultAttributes = {
+  const {
+    dispatch
+  } = useContext(context);
+  const defaultAttributes = {
     left: 0,
     top: 0,
     right: 0,
@@ -172,42 +151,44 @@ function useAttributes (props, attributes) {
     height: 0,
     border: 0
   };
-  var attritube = Object.assign({}, defaultAttributes, attributes, props.attribute);
-  var event = props.event || false;
-  var x, y, width, height;
+  const attritube = Object.assign({}, defaultAttributes, attributes, props.attribute);
+  const event = props.event || false;
+  let x, y, width, height;
   x = attritube.left;
   y = attritube.top;
   width = attritube.width;
   height = attritube.height;
-  var rect = {
-    x: x,
-    y: y,
-    width: width,
-    height: height
+  const rect = {
+    x,
+    y,
+    width,
+    height
   };
-  useEffect(function () {
+  useEffect(() => {
     dispatch({
       type: "update:shape",
-      body: _extends({
-        rect: rect
-      }, event)
+      body: {
+        rect,
+        ...event
+      }
     });
   }, []);
   return attritube;
 }
 
 function Text(props) {
-  var defaultAttributes = {
+  const defaultAttributes = {
     textAlign: "left",
-    textBaseline: "top"
+    textBaseline: "top",
+    font: "25px Lato",
+    fillStyle: "#fff"
   };
-
-  var _useContext = useContext(context),
-      state = _useContext.state;
-
-  var attributes = useAttributes(props, defaultAttributes);
-  var text = props.content;
-  useEffect(function () {
+  const {
+    state
+  } = useContext(context);
+  const attributes = useAttributes(props, defaultAttributes);
+  const text = props.content;
+  useEffect(() => {
     renderText(state.context, attributes, text);
   }, [props.content]);
   return null;
@@ -218,7 +199,7 @@ function renderText(ctx, attributes, content) {
   ctx.fillStyle = attributes.fillStyle;
   ctx.textBaseline = attributes.textBaseline;
   ctx.textAlign = attributes.textAlign;
-  attributes.width = attributes.width || ctx.measureText(Text).width;
+  attributes.width = attributes.width || ctx.measureText(content).width;
 
   if (attributes.textAlign === "right") {
     attributes.left += attributes.width;
@@ -228,31 +209,56 @@ function renderText(ctx, attributes, content) {
     attributes.left += attributes.width / 2;
   }
 
-  ctx.fillText(content, attributes.left, attributes.top);
-
   if (!!attributes.border) {
     ctx.rect(attributes.left, attributes.top, attributes.width, attributes.height);
     ctx.stroke();
   }
+
+  ctx.fillText(content, attributes.left, attributes.top);
 }
 
 function Image(props) {
-  var _useContext = useContext(context),
-      state = _useContext.state;
+  const {
+    state
+  } = useContext(context);
+  const attributes = useAttributes(props);
+  useEffect(() => {
+    let image = document.createElement("img");
+    image.addEventListener("load", () => {
+      renderImage(state.context, attributes, image);
+    });
 
-  var attributes = useAttributes(props, {});
-  useEffect(function () {
-    renderImage(state.context, attributes, props.src);
+    image.onerror = err => {
+      console.log(err);
+    };
+
+    image.src = `${props.src}?${+new Date()}`;
+    return () => {
+      image.onerror = null;
+      image.removeEventListener("load", () => {});
+    };
   }, [props.src]);
   return null;
 }
 
-function renderImage(ctx, attributes, src) {
-  console.log(src, "image", !!attributes.border);
+function renderImage(ctx, attributes, image) {
+  const {
+    left,
+    top,
+    width,
+    height,
+    border
+  } = attributes;
 
-  if (!!attributes.border) {
-    ctx.rect(attributes.left, attributes.top, attributes.width, attributes.height);
-    ctx.stroke();
+  if (left && top && width && height) {
+    if (!!border) {
+      ctx.rect(left, top, width, height);
+      ctx.stroke();
+    }
+
+    ctx.drawImage(image, left, top, width, height);
+  } else {
+    console.log(`renderImage<drawImage> arguments lost`);
   }
 }
 

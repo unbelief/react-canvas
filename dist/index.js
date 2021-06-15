@@ -202,7 +202,9 @@ function useAttributes (props, attributes) {
 function Text(props) {
   var defaultAttributes = {
     textAlign: "left",
-    textBaseline: "top"
+    textBaseline: "top",
+    font: "25px Lato",
+    fillStyle: "#fff"
   };
 
   var _useContext = React.useContext(context),
@@ -221,7 +223,7 @@ function renderText(ctx, attributes, content) {
   ctx.fillStyle = attributes.fillStyle;
   ctx.textBaseline = attributes.textBaseline;
   ctx.textAlign = attributes.textAlign;
-  attributes.width = attributes.width || ctx.measureText(Text).width;
+  attributes.width = attributes.width || ctx.measureText(content).width;
 
   if (attributes.textAlign === "right") {
     attributes.left += attributes.width;
@@ -231,31 +233,54 @@ function renderText(ctx, attributes, content) {
     attributes.left += attributes.width / 2;
   }
 
-  ctx.fillText(content, attributes.left, attributes.top);
-
   if (!!attributes.border) {
     ctx.rect(attributes.left, attributes.top, attributes.width, attributes.height);
     ctx.stroke();
   }
+
+  ctx.fillText(content, attributes.left, attributes.top);
 }
 
 function Image(props) {
   var _useContext = React.useContext(context),
       state = _useContext.state;
 
-  var attributes = useAttributes(props, {});
+  var attributes = useAttributes(props);
   React.useEffect(function () {
-    renderImage(state.context, attributes, props.src);
+    var image = document.createElement("img");
+    image.addEventListener("load", function () {
+      renderImage(state.context, attributes, image);
+    });
+
+    image.onerror = function (err) {
+      console.log(err);
+    };
+
+    image.src = props.src + "?" + +new Date();
+    return function () {
+      image.onerror = null;
+      image.removeEventListener("load", function () {});
+    };
   }, [props.src]);
   return null;
 }
 
-function renderImage(ctx, attributes, src) {
-  console.log(src, "image", !!attributes.border);
+function renderImage(ctx, attributes, image) {
+  var left = attributes.left,
+      top = attributes.top,
+      width = attributes.width,
+      height = attributes.height,
+      border = attributes.border;
 
-  if (!!attributes.border) {
-    ctx.rect(attributes.left, attributes.top, attributes.width, attributes.height);
-    ctx.stroke();
+  if (left && top && width && height) {
+    if (!!border) {
+      ctx.rect(left, top, width, height);
+      ctx.stroke();
+    }
+
+    ctx.drawImage(image, left, top, width, height);
+  } else {
+    console.log("renderImage<drawImage> arguments lost");
   }
 }
 

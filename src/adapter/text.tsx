@@ -1,12 +1,20 @@
 import { useContext, useEffect } from "react";
 import { context } from "./scene";
-import { Attribute } from "./types";
 import useAttributes from "./useAttributes";
+import { Props, Attribute, Event } from "./types";
 
-function Text(props: any) {
+interface TextProps extends Props {
+  content: string;
+  style?: Attribute;
+  event?: Event;
+}
+
+function Text(props: TextProps) {
   const defaultAttributes: Attribute = {
     textAlign: "left",
     textBaseline: "top",
+    font: "25px Lato",
+    fillStyle: "#fff",
   };
 
   const { state } = useContext(context);
@@ -30,13 +38,17 @@ function Text(props: any) {
  * @param {object} context
  * @param {object} attributes top left width height x y font fontSize fillStyle
  */
-function renderText(ctx: any, attributes: any, content: any) {
+function renderText(
+  ctx: CanvasRenderingContext2D,
+  attributes: Required<Attribute>,
+  content: string
+): void {
   ctx.font = attributes.font;
   ctx.fillStyle = attributes.fillStyle;
   ctx.textBaseline = attributes.textBaseline;
   ctx.textAlign = attributes.textAlign;
   //let distText = attributes.filterText(ctx, attributes.text);
-  attributes.width = attributes.width || ctx.measureText(Text).width;
+  attributes.width = attributes.width || ctx.measureText(content).width;
 
   if (attributes.textAlign === "right") {
     attributes.left += attributes.width;
@@ -44,8 +56,6 @@ function renderText(ctx: any, attributes: any, content: any) {
   if (attributes.textAlign === "center") {
     attributes.left += attributes.width / 2;
   }
-  ctx.fillText(content, attributes.left, attributes.top);
-
   if (!!attributes.border) {
     ctx.rect(
       attributes.left,
@@ -55,6 +65,7 @@ function renderText(ctx: any, attributes: any, content: any) {
     );
     ctx.stroke();
   }
+  ctx.fillText(content, attributes.left, attributes.top);
 }
 
 export { Text, renderText };

@@ -1,44 +1,50 @@
 import { useContext, useEffect } from "react";
 import { context } from "./scene";
 import useAttributes from "./useAttributes";
-// import { Props } from "./types";
-// interface Props {
-//   src: string;
-//   style?: any;
-//   event?: any;
-// }
+import { Props, Attribute, Event } from "./types";
+interface ImageProps extends Props {
+  src: string;
+  style?: Attribute;
+  event?: Event;
+}
 
-function Image(props: any) {
-  //   const { state, dispatch } = useContext(context);
+function Image(props: ImageProps) {
   const { state } = useContext(context);
-  const attributes = useAttributes(props, {});
+  const attributes = useAttributes(props);
   useEffect(() => {
-    // let image = new Image();
+    let image: HTMLImageElement = document.createElement("img");
     // image.setAttribute("crossOrigin", "anonymous");
-    // image.onload = function() {
-    //     renderImage(state.context, attributes);
-    //     image.onload = null;
-    //     image = null;
-    // };
-    // image.src = `${props.src}?${+new Date()}`;
-
-    renderImage(state.context, attributes, props.src);
+    image.addEventListener("load", () => {
+      renderImage(state.context, attributes, image);
+    });
+    image.onerror = (err) => {
+      console.log(err);
+    };
+    image.src = `${props.src}?${+new Date()}`;
+    return () => {
+      image.onerror = null;
+      image.removeEventListener("load", () => {});
+    };
+    // renderImage(state.context, attributes, props.src);
   }, [props.src]);
 
   return null;
 }
 
-function renderImage(ctx: any, attributes: any, src: any) {
-  console.log(src, `image`, !!attributes.border);
-  //ctx.drawImage(content, attributes.left, attributes.top, attributes.width, attributes.height);
-  if (!!attributes.border) {
-    ctx.rect(
-      attributes.left,
-      attributes.top,
-      attributes.width,
-      attributes.height
-    );
-    ctx.stroke();
+function renderImage(
+  ctx: CanvasRenderingContext2D,
+  attributes: Attribute,
+  image: HTMLImageElement
+): void {
+  const { left, top, width, height, border } = attributes;
+  if (left && top && width && height) {
+    if (!!border) {
+      ctx.rect(left, top, width, height);
+      ctx.stroke();
+    }
+    ctx.drawImage(image, left, top, width, height);
+  } else {
+    console.log(`renderImage<drawImage> arguments lost`);
   }
 }
 

@@ -28,23 +28,25 @@ declare enum EventType {
     onTransitionEnd = "transitionend"
 }
 interface Event {
-    type: EventType;
-    handler: () => void;
+    type: string;
+    handle: () => void;
 }
 interface Attribute {
     left?: number;
     top?: number;
     right?: number;
     bottom?: number;
-    width?: number | string;
-    height?: number | string;
-    border?: number | string;
-    textAlign?: string;
-    textBaseline?: string;
+    width?: number;
+    height?: number;
+    border?: number | string | boolean;
+    textAlign?: CanvasTextAlign;
+    textBaseline?: CanvasTextBaseline;
+    font?: string;
+    fillStyle?: string;
 }
 interface Props {
     attribute?: Attribute;
     event?: Event;
-    children?: undefined | object | Array<Object>;
+    children?: object | Array<Object>;
 }
 export { EventType, Event, Attribute, Props };
