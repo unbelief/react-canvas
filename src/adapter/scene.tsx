@@ -68,7 +68,9 @@ const context: any = createContext({} as ContextProps);
  * @param {Array} event
  */
 const Scene: FC<Props> = (props: Props) => {
+  console.log(`render Scene`);
   const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <context.Provider value={{ state, dispatch }}>
       <Stage {...props} />
@@ -83,6 +85,7 @@ const Scene: FC<Props> = (props: Props) => {
  * @param {json} attributes
  */
 const Stage: FC<Props> = (props: Props) => {
+  console.log(`render Stage`);
   const { state, dispatch } = useContext(context);
   const stageRef = useRef(null);
   const attributes = (props.attribute || {}) as CSSProperties;

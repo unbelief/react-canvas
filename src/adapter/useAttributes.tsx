@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Attribute } from "./types";
+import { Props, Attribute } from "./types";
 import { context } from "./scene";
 
 /**
@@ -7,7 +7,7 @@ import { context } from "./scene";
  * @param {object} props
  * @param {string} type text/image
  */
-export default function (props: any, attributes?: Attribute) {
+export default function (props: Props, attributes?: Attribute) {
   //   const { state, dispatch } = useContext(context);
   const { dispatch } = useContext(context);
 

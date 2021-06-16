@@ -1,5 +1,5 @@
 import React from "react";
-import { Scene, Text, Image } from "react-canvas";
+import { Scene, Text, Image, Table } from "react-canvas";
 import "react-canvas/dist/index.css";
 import "./index.css";
 
@@ -46,6 +46,26 @@ function App() {
         src={
           "https://www.google.com/logos/doodles/2021/doodle-for-google-2021-us-winner-6753651837109220-s.png"
         }
+      />
+
+      <Table
+        attribute={{
+          top: 385,
+          left: 250,
+          width: 500,
+          height: 300,
+          border: true,
+        }}
+        summary={[
+          { key: "No." },
+          { key: "Name" },
+          { key: "Age" },
+          { key: "From" },
+        ]}
+        data={[
+          { name: "jack", age: 20, from: "UK" },
+          { name: "Sam", age: 22, from: "US" },
+        ]}
       />
     </Scene>
   );

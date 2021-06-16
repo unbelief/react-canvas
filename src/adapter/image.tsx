@@ -4,7 +4,6 @@ import useAttributes from "./useAttributes";
 import { Props, Attribute, Event } from "./types";
 interface ImageProps extends Props {
   src: string;
-  style?: Attribute;
   event?: Event;
 }
 
@@ -20,7 +19,8 @@ function Image(props: ImageProps) {
     image.onerror = (err) => {
       console.log(err);
     };
-    image.src = `${props.src}?${+new Date()}`;
+    // ?${+new Date()}
+    image.src = `${props.src}`;
     return () => {
       image.onerror = null;
       image.removeEventListener("load", () => {});

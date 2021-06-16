@@ -1,7 +1,7 @@
-import { Attribute } from "./types";
+import { Props, Attribute } from "./types";
 /**
  * attribute && event
  * @param {object} props
  * @param {string} type text/image
  */
-export default function (props: any, attributes?: Attribute): any;
+export default function (props: Props, attributes?: Attribute): Attribute;

@@ -1,7 +1,6 @@
 import { Props, Attribute, Event } from "./types";
 interface ImageProps extends Props {
     src: string;
-    style?: Attribute;
     event?: Event;
 }
 declare function Image(props: ImageProps): null;

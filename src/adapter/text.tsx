@@ -5,7 +5,6 @@ import { Props, Attribute, Event } from "./types";
 
 interface TextProps extends Props {
   content: string;
-  style?: Attribute;
   event?: Event;
 }
 

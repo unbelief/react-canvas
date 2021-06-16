@@ -48,6 +48,8 @@ var reducer = function reducer(state, action) {
 var context = React.createContext({});
 
 var Scene = function Scene(props) {
+  console.log("render Scene");
+
   var _useReducer = React.useReducer(reducer, initialState),
       state = _useReducer[0],
       dispatch = _useReducer[1];
@@ -61,6 +63,8 @@ var Scene = function Scene(props) {
 };
 
 var Stage = function Stage(props) {
+  console.log("render Stage");
+
   var _useContext = React.useContext(context),
       state = _useContext.state,
       dispatch = _useContext.dispatch;
@@ -256,7 +260,7 @@ function Image(props) {
       console.log(err);
     };
 
-    image.src = props.src + "?" + +new Date();
+    image.src = "" + props.src;
     return function () {
       image.onerror = null;
       image.removeEventListener("load", function () {});
@@ -284,8 +288,41 @@ function renderImage(ctx, attributes, image) {
   }
 }
 
+function Table(props) {
+  var _useContext = React.useContext(context),
+      state = _useContext.state;
+
+  var attributes = useAttributes(props);
+  var summary = props.summary,
+      data = props.data;
+  React.useEffect(function () {
+    renderTable(state.context, attributes, summary, data);
+    return;
+  }, [summary, data]);
+  return null;
+}
+
+function renderTable(ctx, attributes, summary, data) {
+  console.log("renderTable", summary, data);
+  var left = attributes.left,
+      top = attributes.top,
+      width = attributes.width,
+      height = attributes.height,
+      border = attributes.border;
+
+  if (left && top && width && height) {
+    if (!!border) {
+      ctx.rect(left, top, width, height);
+      ctx.stroke();
+    }
+  } else {
+    console.log("renderImage<drawImage> arguments lost");
+  }
+}
+
 exports.Image = Image;
 exports.Scene = Scene;
+exports.Table = Table;
 exports.Text = Text;
 exports.context = context;
 //# sourceMappingURL=index.js.map

@@ -27,6 +27,7 @@ const reducer = (state, action) => {
 const context = createContext({});
 
 const Scene = props => {
+  console.log(`render Scene`);
   const [state, dispatch] = useReducer(reducer, initialState);
   return React.createElement(context.Provider, {
     value: {
@@ -37,6 +38,7 @@ const Scene = props => {
 };
 
 const Stage = props => {
+  console.log(`render Stage`);
   const {
     state,
     dispatch
@@ -232,7 +234,7 @@ function Image(props) {
       console.log(err);
     };
 
-    image.src = `${props.src}?${+new Date()}`;
+    image.src = `${props.src}`;
     return () => {
       image.onerror = null;
       image.removeEventListener("load", () => {});
@@ -262,5 +264,41 @@ function renderImage(ctx, attributes, image) {
   }
 }
 
-export { Image, Scene, Text, context };
+function Table(props) {
+  const {
+    state
+  } = useContext(context);
+  const attributes = useAttributes(props);
+  const {
+    summary,
+    data
+  } = props;
+  useEffect(() => {
+    renderTable(state.context, attributes, summary, data);
+    return;
+  }, [summary, data]);
+  return null;
+}
+
+function renderTable(ctx, attributes, summary, data) {
+  console.log(`renderTable`, summary, data);
+  const {
+    left,
+    top,
+    width,
+    height,
+    border
+  } = attributes;
+
+  if (left && top && width && height) {
+    if (!!border) {
+      ctx.rect(left, top, width, height);
+      ctx.stroke();
+    }
+  } else {
+    console.log(`renderImage<drawImage> arguments lost`);
+  }
+}
+
+export { Image, Scene, Table, Text, context };
 //# sourceMappingURL=index.modern.js.map
