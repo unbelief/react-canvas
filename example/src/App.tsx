@@ -13,7 +13,8 @@ function App() {
     >
       <Text
         attribute={{
-          top: 330,
+          // top: 330,
+          top: 160,
           left: 438,
           width: 150,
           height: 30,
@@ -50,21 +51,21 @@ function App() {
 
       <Table
         attribute={{
-          top: 385,
+          top: 265,
           left: 250,
           width: 500,
           height: 300,
-          border: true,
+          // border: true,
         }}
         summary={[
-          { key: "No." },
-          { key: "Name" },
-          { key: "Age" },
-          { key: "From" },
+          { displayName: "No.", key: "no" },
+          { displayName: "Name", key: "name" },
+          { displayName: "Age", key: "age" },
+          { displayName: "From", key: "from" },
         ]}
         data={[
-          { name: "jack", age: 20, from: "UK" },
-          { name: "Sam", age: 22, from: "US" },
+          { name: "jack", age: 20, from: "UK", no: 1 },
+          { name: "Sam", age: 22, from: "US", no: 2 },
         ]}
       />
     </Scene>

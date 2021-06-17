@@ -1,6 +1,12 @@
 import { Props, Event } from "./types";
+interface Summary {
+    displayName: string;
+    key: string;
+    width?: number;
+    fillStyle?: string;
+}
 interface TableProps extends Props {
-    summary: Array<Object>;
+    summary: Array<Summary>;
     data: Array<Object>;
     event?: Event;
 }
