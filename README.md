@@ -35,7 +35,7 @@ function App() {
 }
 ```
 
-![preview](https://raw.githubusercontent.com/unbelief/react-canvas/tree/master/dist/8FAB98DD-ECCE-433D-9B74-D13DF1753FFC.png)
+![preview](https://raw.githubusercontent.com/unbelief/react-canvas/master/dist/8FAB98DD-ECCE-433D-9B74-D13DF1753FFC.png)
 
 ## License
 
