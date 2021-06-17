@@ -17,16 +17,25 @@ yarn add git+ssh:git@github.com:unbelief/react-canvas.git
 
 ```tsx
 import React, { Component } from "react";
-
-import MyComponent from "react-canvas";
+import { Scene, Text, Image, Table } from "react-canvas";
 import "react-canvas/dist/index.css";
 
-class Example extends Component {
-  render() {
-    return <MyComponent />;
-  }
+function App() {
+  return (
+    <Scene
+      attribute={{
+        width: 500,
+        height: 350,
+      }}
+    >
+    <Text />
+    <Image />
+    <Table />
+    </Scene>
 }
 ```
+
+![preview](https://raw.githubusercontent.com/unbelief/react-canvas/tree/master/dist/8FAB98DD-ECCE-433D-9B74-D13DF1753FFC.png)
 
 ## License
 
